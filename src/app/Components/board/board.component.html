@@ -1,0 +1,39 @@
+<div class="container-fluid">
+  <div class="row" >
+    <!-- Left Column for Information -->
+    <div class="col-md-3 mt-5">
+      <div class="card" style="width: 350px;" >
+        <div class="card-body">
+          <!-- Your information content goes here -->
+          <h5 class="card-title" style="font-size: 65px; text-align: center; height: 650px;">Project Kanboard Board</h5>
+          <p class="card-text">Any information you want to display.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kanban Board with Dynamic Column Titles -->
+    <div class="col-md-8 mt-5">
+      <div class="row">
+        <!-- Dynamic Column Titles -->
+        <div *ngFor="let column of columns" class="col-md-3">
+          <div class="card rounded">
+            <div class="card-body">
+          <h5 class="text-center ">{{ column.name }}</h5>
+        </div>
+      </div>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <!-- Dynamic Columns -->
+        <div *ngFor="let column of columns" class="col-md-3">
+          <div class="card rounded">
+            <div class="card-body" style="height: 600px;">
+              <app-column [column]="column"></app-column>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
