@@ -1,39 +1,100 @@
 <div class="container-fluid">
-  <div class="row" >
-    <!-- Left Column for Information -->
+  <div class="row">
     <div class="col-md-3 mt-5">
-      <div class="card" style="width: 350px;" >
+      <div class="card shadow" style="width: 350px;">
         <div class="card-body">
-          <!-- Your information content goes here -->
-          <h5 class="card-title" style="font-size: 65px; text-align: center; height: 650px;">Project Kanboard Board</h5>
-          <p class="card-text">Any information you want to display.</p>
+          <h5 class="card-title text-center mb-4" style="font-size: 2.5rem;">Project Kanboard Board</h5>
+
+          <form (ngSubmit)="addTask()" #taskForm="ngForm" class="task-form">
+            <div class="form-group">
+              <label for="title">Task Title:</label>
+              <input type="text" id="title" name="title" maxlength="23" [(ngModel)]="newTask.title" required class="form-control" placeholder="Api bug">
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <textarea id="description" maxlength="70" name="description" [(ngModel)]="newTask.description" class="form-control" placeholder="Problem with APIs"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="tags">Tags (comma-separated):</label>
+              <input type="text" id="tags" name="tags" maxlength="40" [(ngModel)]="tags" class="form-control" placeholder="front-end, bug, example">
+            </div>
+
+            <div class="form-group">
+              <label for="priority">Priority:</label>
+              <select id="priority" name="priority" [(ngModel)]="newTask.priority" class="form-control">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+
+            <button type="submit" class="btn btn-success btn-block">Add Task</button>
+            <button class="btn btn-warning btn-block mt-3" (click)="reset()">Reset KanbanBoard</button>
+          </form>
+          <a href="https://www.canva.com/templates/EAEAPtnIbFo-memphis-kanban-board-brainstorm/" target="_blank" class="mt-3 d-block text-dark">
+            <i class="fa fa-paint-brush" aria-hidden="true"></i> Design Inspiration
+          </a>
+          <p class="mt-4 text-muted">Copyright &copy; 2023 <a href="https://pedro-alexandre.com" target="_blank">Pedro Santos</a></p>
         </div>
       </div>
     </div>
 
-    <!-- Kanban Board with Dynamic Column Titles -->
-    <div class="col-md-8 mt-5">
+
+
+     <div class="col-md-8 mt-5">
       <div class="row">
-        <!-- Dynamic Column Titles -->
         <div *ngFor="let column of columns" class="col-md-3">
           <div class="card rounded">
-            <div class="card-body">
-          <h5 class="text-center ">{{ column.name }}</h5>
-        </div>
-      </div>
+            <div *ngIf="!column.editMode; else editColumn" class="card-body custom-card-body" (mouseover)="mousehover(column)" (mouseleave)="mouseleave(column)" (click)="editColumnTitle(column)" [id]="column.id" style="box-shadow: 8px 8px 0 white, 10px 10px 5px black;">
+              <h3 style="font-size: 20px;">{{ columns.indexOf(column) + 1}} | {{ column.name }}  <span class="float-right"><i [class]="column.icon" aria-hidden="true"></i> </span></h3>
+            </div>
+            <ng-template #editColumn>
+              <div class="card-body"   [id]="column.id"  style="box-shadow: 8px 8px 0 white, 10px 10px 5px black;">
+                <h3>{{ columns.indexOf(column) + 1}} |
+                  <input type="text" size="10" style=" background-color: transparent" [placeholder]="column.name"  (keyup.enter)="updateColumnTitle(column)" [(ngModel)]="column.name" >
+                  <span (click)="updateColumnTitle(column)" style="cursor: pointer;" class="float-right"><i (mouseover)="mousehover(column)"  [class]="column.icon" aria-hidden="true"></i></span>
+                </h3>
+              </div>
+            </ng-template>
+          </div>
         </div>
       </div>
 
-      <div class="row mt-5">
-        <!-- Dynamic Columns -->
-        <div *ngFor="let column of columns" class="col-md-3">
-          <div class="card rounded">
-            <div class="card-body" style="height: 600px;">
-              <app-column [column]="column"></app-column>
+      <!-- <div *ngFor="let column of columns" class="col-md-3">
+        <div class="card-body" [id]="column.id" style="height: 600px; background-color:white !important; position: relative;"> -->
+
+      <div class="row mt-5" >
+
+        <div  *ngFor="let column of columns" class="col-md-3">
+
+
+            <div class="card-body" [id]="column.id" style="height: 600px; position: relative; overflow: hidden; background-color:white !important">
+            <div class="page-background" [ngClass]="{'page-turn': !column.turningPage, 'page-turned': column.turningPage}"></div>
+
+            <!-- Number on the bottom left -->
+            <div  *ngIf="column.currentPage > 0" style="position: absolute; bottom: 0; left: 0; padding: 4px; z-index: 0; font-weight: bolder;">{{column.currentPage -1}}</div>
+            <!-- Number on the bottom right -->
+            <div *ngIf="!isLastPage(column)" style="position: absolute; bottom: 0; right: 0; padding: 4px; z-index: 0; font-weight: bolder;">{{column.currentPage +1}}</div>
+
+            <div [id]="column.id" style="background-color: white;box-shadow: none;height: calc(100% - 40px); " class="column"  cdkDropList (cdkDropListDropped)="onTaskDropped($event, column)">
+              <app-task   *ngFor="let task of getTasksForPage(column)" [task]="task" cdkDrag (deleteTaskEvent)="onDeleteTask($event)" ></app-task>
             </div>
+
+
+                <div *ngIf="!isLastPage(column)" class="lifted-corner" (click)="onClickRightLiftedCorner(column)"></div>
+                <div *ngIf="column.currentPage > 0" class="left-corner" (click)="onClickLeftLiftedCorner(column)"></div>
+
+
+
+          </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+
+

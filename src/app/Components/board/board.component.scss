@@ -1,4 +1,135 @@
 .card-body {
-  border: 1px solid black;
-  box-shadow: 8px 8px 0 white, 10px 10px 5px black;
+  overflow: hidden;
+  position: relative;
+}
+
+.column {
+  overflow: hidden;
+  overflow-y: auto;
+  height: 100%; /* Set a specific height or use a percentage, so the scrollbar appears when content exceeds this height */
+}
+
+/* Optional: To hide the scrollbar handle */
+.column::-webkit-scrollbar {
+  width: 0.5em; /* Adjust as needed */
+}
+
+.column::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the color of the scrollbar handle */
+}
+
+.column::-webkit-scrollbar-track {
+  background-color: transparent; /* Set the color of the scrollbar track */
+}
+.page-background {
+  background-color: rgb(255, 254, 254);
+  height: 100%;
+  width: 200%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  transform: rotateY(0);
+  transition: transform 0.5s ease-in-out;
+}
+
+.page-turn {
+  transform: rotateY(-180deg);
+}
+
+
+.card-body {
+  border: 2px solid black;
+  box-shadow: 8px 8px 0 #c3f8e8, 10px 10px 5px black;
+}
+
+.card-body.custom-card-body:hover {
+ opacity: 0.8;
+ cursor: pointer;
+
+}
+
+.sticky-note {
+  position: relative;
+}
+
+.lifted-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 25px 25px 0 0;
+  border-radius: 5%;
+  border-color: #5e5e5e transparent transparent transparent;
+  transition: all 0.3s ease;
+}
+
+.lifted-corner:hover {
+  border-width: 50px 50px 0 0;
+  border-color: #000000 transparent transparent transparent;
+}
+
+.left-corner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 25px 0 0 25px;
+  border-radius: 5%;
+  border-color: #5e5e5e transparent transparent transparent;
+  transition: all 0.3s ease;
+}
+
+.left-corner:hover {
+  border-width: 50px 0 0 50px;
+  border-color: #000000 transparent transparent transparent;
+}
+
+
+.task-form {
+  max-width: 400px;
+  margin: 20px 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+#board1{
+  background-color: #b5e4fb;
+  box-shadow: 8px 8px 0 #b5e4fb, 10px 10px 5px black;
+}
+
+
+#board2{
+  background-color: #ffffa9;
+  box-shadow: 8px 8px 0 #ffffa9, 10px 10px 5px black;
+}
+
+#board3{
+  background-color: #e3e6fe;
+  box-shadow: 8px 8px 0 #e3e6fe, 10px 10px 5px black;
+}
+
+#board4{
+  background-color: #cff4c8;
+  box-shadow: 8px 8px 0 #cff4c8, 10px 10px 5px black;
+}
+
+@media (max-width: 1500px) {
+
+  .col-md-3 {
+      display:inline-flex;
+  }
+}
+
+@media (max-width: 750px) {
+  .col-md-3 {
+
+      display:block;
+  }
 }

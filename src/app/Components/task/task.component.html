@@ -1,4 +1,33 @@
-<div class="task">
-  <div class="task-title">{{ task.title }}</div>
-  <!-- Add other task details here -->
+<div  class="task" cdkDrag [cdkDragData]="task">
+  <div class="task-header">
+    <div class="task-title">
+      {{ task.title }}
+      <span class="task-priority" [ngClass]="{'low': task.priority === 'low', 'medium': task.priority === 'medium', 'high': task.priority === 'high'}">
+        {{ task.priority }}
+      </span>
+
+        <span *ngIf="!deleteConfirm ; else deleteAction" class="icon float-right " (click)="deleteTask()">
+          <i class="fa fa-trash"  style="cursor: pointer;" ></i>
+        </span>
+      <ng-template #deleteAction>
+        <span class="icon float-right ">
+          <i class="fa fa-check " aria-hidden="true" style="cursor: pointer; color: green;" (click)="confirmDelete(0)"></i>
+          <i class="fa fa-times ml-2" aria-hidden="true" style="cursor: pointer; color: red;" (click)="confirmDelete(1)"></i>
+        </span>
+      </ng-template>
+
+    </div>
+
+  </div>
+
+  <div *ngIf="task.tags && task.tags.length > 0" class="task-tags">
+    <span class="tag" *ngFor="let tag of task.tags">{{ tag }}</span>
+  </div>
+
+  <div class="task-description" style="max-width: 50ch; overflow-wrap: break-word;">{{ task.description }}</div>
+
+  <div class="task-dates">
+    <span style="float: left;"> Created: {{ task.creationDate | date: 'shortDate' }}</span>
+    <span> Modified: {{ task.lastModificationDate | date: 'shortDate' }}</span>
+  </div>
 </div>
